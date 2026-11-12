@@ -24,6 +24,7 @@ function updateAuthUI(){
  $("auth-submit").textContent=registering?"REGISTER":"SIGN IN";
  $("auth-mode").textContent=registering?"Already registered? Sign in":"Need an account? Register";
  $("sign-out").classList.toggle("hidden",!currentUser);$("auth-form").classList.toggle("hidden",!!currentUser);
+ $("profile-sign-out").classList.toggle("hidden",!currentUser);
  $("auth-message").textContent=currentUser?currentUser.email:"";
  $("staff-tools").classList.toggle("hidden",!(currentUser&&isStaff()));
  $("staff-role-tools").classList.toggle("hidden",!(currentUser&&currentRole==="admin"));
@@ -125,6 +126,7 @@ $("auth-form").addEventListener("submit",async e=>{
  await setUser(r.data.user);toast(registering?"Account created.":"Signed in.");if(r.data.session)hideAuth();
 });
 $("sign-out").addEventListener("click",async()=>{if(db)await db.auth.signOut();await setUser(null);hideAuth();toast("Signed out.")});
+ $("profile-sign-out").addEventListener("click",async()=>{if(db)await db.auth.signOut();await setUser(null);$("profile-modal").classList.add("hidden");toast("Signed out.")});
 document.querySelectorAll(".category").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".category").forEach(x=>x.classList.remove("active"));b.classList.add("active");currentCategory=b.dataset.category;$("topic-heading").textContent=categoryNames[currentCategory];refreshPosts()}));
 $("new-post").addEventListener("click",()=>{if(!currentUser){showAuth();toast("Sign in before creating a topic.");return}if(!requireSetup())return;$("post-form").classList.remove("hidden");$("post-title").focus()});
 $("cancel-post").addEventListener("click",()=>$("post-form").classList.add("hidden"));
