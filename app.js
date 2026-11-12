@@ -1,13 +1,13 @@
 // City Of Los Santos community site. Use the Supabase publishable/anon key only.
-const SUPABASE_URL="YOUR_SUPABASE_PROJECT_URL";
-const SUPABASE_ANON_KEY="YOUR_SUPABASE_ANON_KEY";
+const SUPABASE_URL="https://kyosnsplubacxqgdvqpk.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_OvSyDiY9_2hDu1GgqVpK8w_IeQKpGRd";
 const configured=SUPABASE_URL.startsWith("https://")&&!SUPABASE_URL.includes("YOUR_")&&!SUPABASE_ANON_KEY.includes("YOUR_");
 const db=configured&&window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 let currentCategory="announcements",currentUser=null,currentRole="member",registering=false,selectedApplication="";
 const $=id=>document.getElementById(id);
 const categoryNames={announcements:"ANNOUNCEMENTS",general:"GENERAL DISCUSSION",gangs:"GANGS & ORGANIZATIONS",support:"SUPPORT & APPEALS"};
 function toast(message){const el=$("toast");el.textContent=message;el.classList.remove("hidden");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.add("hidden"),3500)}
-function requireSetup(){if(!db){toast("Supabase is not connected. Add your Project URL and publishable key in app.js.");return false}return true}
+function requireSetup(){if(!db){toast("Supabase is not connected. Check the Supabase client script and project settings.");return false}return true}
 function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function showAuth(){$("auth-modal").classList.remove("hidden");$("auth-message").textContent="";updateAuthUI()}
 function hideAuth(){$("auth-modal").classList.add("hidden")}
