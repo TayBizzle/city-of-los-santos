@@ -24,7 +24,6 @@ function updateAuthUI(){
  $("auth-submit").textContent=registering?"REGISTER":"SIGN IN";
  $("auth-mode").textContent=registering?"Already registered? Sign in":"Need an account? Register";
  $("auth-form").classList.toggle("hidden",!!currentUser);
- $("top-sign-out").classList.toggle("hidden",!currentUser);
  $("auth-message").textContent=currentUser?currentUser.email:"";
  $("staff-tools").classList.toggle("hidden",!(currentUser&&isStaff()));
  $("staff-role-tools").classList.toggle("hidden",!(currentUser&&currentRole==="admin"));
@@ -76,9 +75,9 @@ async function setUser(user){
  updateAuthUI();await refreshPosts();if(user&&isStaff())await loadStaffApplications();if(user&&currentRole==="admin")await loadMemberRoles();
 }
 $("year").textContent=new Date().getFullYear();
-$("account-toggle").addEventListener("click",()=>currentUser?openMemberProfile(currentUser.id,true):showAuth());$("side-account").addEventListener("click",()=>currentUser?openMemberProfile(currentUser.id,true):showAuth());$("close-auth").addEventListener("click",hideAuth);
+$("account-toggle").addEventListener("click",()=>currentUser?openAccountSettings():showAuth());$("side-account").addEventListener("click",()=>currentUser?openAccountSettings():showAuth());$("close-auth").addEventListener("click",hideAuth);
 $("close-profile").addEventListener("click",()=>$("profile-modal").classList.add("hidden"));
-$("top-sign-out").addEventListener("click",async()=>{if(db)await db.auth.signOut();await setUser(null);$("profile-modal").classList.add("hidden");hideAuth();toast("Signed out.")});
+$("close-settings").addEventListener("click",()=>$("settings-modal").classList.add("hidden"));
 async function openMemberProfile(userId,own=false){
  if(!db)return;
  const {data,error}=await db.from("profiles").select("id,display_name,role,avatar_url,created_at").eq("id",userId).maybeSingle();
@@ -87,33 +86,71 @@ async function openMemberProfile(userId,own=false){
  $("profile-avatar").src=data.avatar_url||"";$("profile-avatar").classList.toggle("hidden",!data.avatar_url);$("profile-avatar-fallback").classList.toggle("hidden",!!data.avatar_url);$("profile-avatar-fallback").textContent=(data.display_name||"LS").slice(0,2).toUpperCase();
  $("profile-role").textContent=roleLabel(data.role).toUpperCase();
  $("profile-joined").textContent="Member since "+new Date(data.created_at).toLocaleDateString();
- $("profile-edit").classList.toggle("hidden",!(own&&currentUser&&currentUser.id===userId));
- $("display-name-input").value=data.display_name||"";
+ if(own&&currentUser&&currentUser.id===userId){openAccountSettings();return}
  $("profile-modal").classList.remove("hidden");
 }
-$("upload-avatar").addEventListener("click",async()=>{
+async function openAccountSettings(){
  if(!currentUser||!requireSetup())return;
- const file=$("avatar-file").files[0];
+ const {data,error}=await db.from("profiles").select("id,display_name,role,avatar_url,created_at").eq("id",currentUser.id).maybeSingle();
+ if(error){toast("Could not load account settings.");return}
+ currentProfile=data;currentRole=data?.role||"member";updateAuthUI();
+ $("settings-name-preview").textContent=data?.display_name||"Community Member";
+ $("settings-email").textContent=currentUser.email||"";
+ $("settings-display-name").value=data?.display_name||"";
+ $("settings-avatar-preview").src=data?.avatar_url||"";
+ $("settings-modal").classList.remove("hidden");
+}
+$("settings-upload-avatar").addEventListener("click",async()=>{
+ if(!currentUser||!requireSetup())return;
+ const file=$("settings-avatar-file").files[0];
  if(!file){toast("Choose a profile picture first.");return}
  if(!["image/png","image/jpeg","image/webp","image/gif"].includes(file.type)){toast("Choose a PNG, JPG, WEBP, or GIF image.");return}
  if(file.size>2*1024*1024){toast("Profile pictures must be 2 MB or smaller.");return}
- const ext=({ "image/png":"png","image/jpeg":"jpg","image/webp":"webp","image/gif":"gif"})[file.type];
+ const ext=({"image/png":"png","image/jpeg":"jpg","image/webp":"webp","image/gif":"gif"})[file.type];
  const path=currentUser.id+"/avatar."+ext;
  const {error:uploadError}=await db.storage.from("avatars").upload(path,file,{upsert:true,contentType:file.type,cacheControl:"3600"});
  if(uploadError){toast("Upload failed. Run the profile picture setup SQL first.");return}
  const {data:{publicUrl}}=db.storage.from("avatars").getPublicUrl(path);
  const avatarUrl=publicUrl+"?v="+Date.now();
  const {data,error}=await db.from("profiles").update({avatar_url:avatarUrl}).eq("id",currentUser.id).select("id,display_name,role,avatar_url,created_at").single();
- if(error){toast("Picture uploaded, but profile could not be updated. Run the profile setup SQL.");return}
- currentProfile=data;updateAuthUI();$("profile-avatar").src=avatarUrl;$("profile-avatar").classList.remove("hidden");$("profile-avatar-fallback").classList.add("hidden");$("avatar-file").value="";toast("Profile picture updated.");refreshPosts();
+ if(error){toast("Picture uploaded, but profile could not be updated. Check the profile picture setup SQL.");return}
+ currentProfile=data;updateAuthUI();$("settings-avatar-preview").src=avatarUrl;$("settings-avatar-file").value="";toast("Profile picture updated.");await refreshPosts();
 });
-$("save-display-name").addEventListener("click",async()=>{
- const name=$("display-name-input").value.trim();
+$("settings-save-name").addEventListener("click",async()=>{
+ const name=$("settings-display-name").value.trim();
  if(name.length<3||name.length>24){toast("Forum names must be 3–24 characters.");return}
  if(!/^[a-zA-Z0-9 _.-]+$/.test(name)){toast("Use letters, numbers, spaces, dots, underscores, or hyphens.");return}
  const {data,error}=await db.from("profiles").update({display_name:name}).eq("id",currentUser.id).select("id,display_name,role,avatar_url,created_at").single();
- if(error){toast("Could not save forum name. Run the profile setup SQL first.");return}
- currentProfile=data;currentRole=data.role;updateAuthUI();$("profile-name").textContent=data.display_name;$("profile-role").textContent=roleLabel(data.role).toUpperCase();toast("Forum name updated.");refreshPosts();
+ if(error){toast("Could not save forum name. Check the profile setup SQL.");return}
+ currentProfile=data;currentRole=data.role;updateAuthUI();$("settings-name-preview").textContent=data.display_name;toast("Forum name updated.");await refreshPosts();
+});
+$("settings-password-form").addEventListener("submit",async e=>{
+ e.preventDefault();if(!currentUser||!requireSetup())return;
+ const password=$("settings-new-password").value;
+ if(password.length<8){toast("Use at least 8 characters.");return}
+ const {error}=await db.auth.updateUser({password});
+ if(error){$("settings-message").textContent=error.message;return}
+ $("settings-password-form").reset();$("settings-message").textContent="Password changed successfully.";
+});
+$("settings-sign-out").addEventListener("click",async()=>{
+ if(!db)return;
+ const {error}=await db.auth.signOut();
+ if(error){toast("Could not sign out: "+error.message);return}
+ $("settings-modal").classList.add("hidden");$("profile-modal").classList.add("hidden");hideAuth();await setUser(null);toast("Signed out.");
+});
+$("settings-delete-account").addEventListener("click",()=>{
+ $("delete-confirm-text").value="";$("delete-message").textContent="";$("delete-confirm-modal").classList.remove("hidden");
+});
+$("cancel-delete-account").addEventListener("click",()=>$("delete-confirm-modal").classList.add("hidden"));
+$("confirm-delete-account").addEventListener("click",async()=>{
+ if($("delete-confirm-text").value.trim()!=="DELETE"){$("delete-message").textContent="Type DELETE exactly to confirm.";return}
+ if(!currentUser||!requireSetup())return;
+ $("confirm-delete-account").disabled=true;$("confirm-delete-account").textContent="DELETING…";
+ const {error}=await db.functions.invoke("delete-account");
+ $("confirm-delete-account").disabled=false;$("confirm-delete-account").textContent="PERMANENTLY DELETE ACCOUNT";
+ if(error){$("delete-message").textContent="Account deletion is not configured yet. The site owner must deploy the Supabase delete-account function and set its service-role secret. No account was deleted.";return}
+ $("delete-confirm-modal").classList.add("hidden");$("settings-modal").classList.add("hidden");
+ await db.auth.signOut();await setUser(null);toast("Your account has been deleted.");
 });
 $("auth-mode").addEventListener("click",()=>{registering=!registering;updateAuthUI();$("auth-message").textContent=""});
 $("discord-auth").addEventListener("click",async()=>{if(!requireSetup())return;const {error}=await db.auth.signInWithOAuth({provider:"discord",options:{redirectTo:window.location.origin}});if(error){$("auth-message").textContent=error.message;}});
