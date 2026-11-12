@@ -79,5 +79,24 @@ $("application-form").addEventListener("submit",async e=>{
  const {error}=await db.from("applications").insert({type:selectedApplication,applicant_name:$("app-name").value.trim(),discord_username:$("app-discord").value.trim(),details:$("app-details").value.trim(),user_id:currentUser.id});
  if(error){toast(error.message);return}$("application-form").reset();$("application-form").classList.add("hidden");toast("Application submitted. Thank you.");
 });
-if(db){db.auth.getSession().then(({data,error})=>{if(error)toast(error.message);return setUser(data?.session?.user??null)});db.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){$("auth-modal").classList.remove("hidden");$("auth-form").classList.add("hidden");$("password-reset-form").classList.remove("hidden");$("auth-heading").textContent="RESET YOUR PASSWORD";$("auth-message").textContent="Choose a new password."; $("forgot-password").classList.add("hidden");$("auth-mode").classList.add("hidden");}setUser(session?.user??null)})}
+function showPasswordReset(){
+ $("auth-modal").classList.remove("hidden");
+ $("auth-form").classList.add("hidden");
+ $("password-reset-form").classList.remove("hidden");
+ $("auth-heading").textContent="RESET YOUR PASSWORD";
+ $("auth-message").textContent="Choose a new password.";
+ $("forgot-password").classList.add("hidden");
+ $("auth-mode").classList.add("hidden");
+ $("sign-out").classList.add("hidden");
+}
+if(db){
+ db.auth.onAuthStateChange((event,session)=>{
+  if(event==="PASSWORD_RECOVERY")showPasswordReset();
+  setUser(session?.user??null);
+ });
+ // Also recognize recovery links on direct page load in case the auth event fires before the UI is ready.
+ const recoveryUrl=new URL(window.location.href);
+ if(window.location.hash.includes("type=recovery")||recoveryUrl.searchParams.get("type")==="recovery")showPasswordReset();
+ db.auth.getSession().then(({data,error})=>{if(error)toast(error.message);return setUser(data?.session?.user??null)});
+}
 else{updateAuthUI();refreshPosts()}
