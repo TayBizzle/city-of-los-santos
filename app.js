@@ -11,8 +11,10 @@ function requireSetup(){if(!db){toast("Supabase is not connected. Check the Supa
 function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function showAuth(){$("auth-modal").classList.remove("hidden");$("auth-message").textContent="";updateAuthUI()}
 function hideAuth(){$("auth-modal").classList.add("hidden")}
+function setAvatarImage(container,url,fallback){const el=$(container);if(!el)return;if(url){el.innerHTML='<img src="'+escapeHtml(url)+'" alt="" />';}else{el.textContent=fallback||"LS";}}
 function updateAuthUI(){
  $("account-label").textContent=currentUser?(currentProfile?.display_name||"My account"):"Account";
+ setAvatarImage("account-avatar",currentProfile?.avatar_url,(currentProfile?.display_name||"LS").slice(0,2).toUpperCase());
  $("side-account").textContent=currentUser?"MY PROFILE":"CREATE ACCOUNT";
  $("auth-heading").textContent=currentUser?"YOU'RE SIGNED IN.":(registering?"CREATE ACCOUNT.":"WELCOME BACK.");
  $("auth-submit").textContent=registering?"REGISTER":"SIGN IN";
@@ -24,10 +26,10 @@ function updateAuthUI(){
 async function refreshPosts(){
  const target=$("posts");
  if(!db){target.innerHTML='<p class="empty">Community preview is available. Connect Supabase to enable accounts, posts, and applications.</p>';return}
- const {data,error}=await db.from("forum_posts").select("id,title,body,category,created_at,user_id,profiles(display_name,role)").eq("category",currentCategory).order("created_at",{ascending:false}).limit(30);
+ const {data,error}=await db.from("forum_posts").select("id,title,body,category,created_at,user_id,profiles(display_name,role,avatar_url)").eq("category",currentCategory).order("created_at",{ascending:false}).limit(30);
  if(error){target.textContent="Could not load topics. Check the Supabase tables and policies.";return}
  if(!data?.length){target.innerHTML='<p class="empty">No topics yet. Sign in and start the conversation.</p>';return}
- target.innerHTML=data.map(p=>'<article class="post"><h4>'+escapeHtml(p.title)+'</h4><p>'+escapeHtml(p.body)+'</p><div class="post-meta">BY <button class="member-link" data-user="'+p.user_id+'" type="button">'+escapeHtml(p.profiles?.display_name||"COMMUNITY MEMBER")+'</button> · '+new Date(p.created_at).toLocaleString()+'</div></article>').join("");
+ target.innerHTML=data.map(p=>'<article class="post"><h4>'+escapeHtml(p.title)+'</h4><p>'+escapeHtml(p.body)+'</p><div class="post-meta">BY <button class="member-link" data-user="'+p.user_id+'" type="button">'+(p.profiles?.avatar_url?'<img class="member-avatar" src="'+escapeHtml(p.profiles.avatar_url)+'" alt="">':'<span class="member-avatar-fallback">LS</span>')+escapeHtml(p.profiles?.display_name||"COMMUNITY MEMBER")+'</button> · '+new Date(p.created_at).toLocaleString()+'</div></article>').join("");
  target.querySelectorAll(".member-link").forEach(b=>b.addEventListener("click",()=>openMemberProfile(b.dataset.user)));
 }
 async function loadStaffApplications(){
@@ -46,7 +48,7 @@ async function updateApplication(id,status){
 }
 async function setUser(user){
  currentUser=user;currentRole="member";currentProfile=null;
- if(db&&user){const {data}=await db.from("profiles").select("id,display_name,role,created_at").eq("id",user.id).maybeSingle();currentProfile=data;currentRole=data?.role||"member"}
+ if(db&&user){const {data}=await db.from("profiles").select("id,display_name,role,avatar_url,created_at").eq("id",user.id).maybeSingle();currentProfile=data;currentRole=data?.role||"member"}
  updateAuthUI();await refreshPosts();if(user&&["admin","moderator"].includes(currentRole))await loadStaffApplications();
 }
 $("year").textContent=new Date().getFullYear();
@@ -57,17 +59,34 @@ async function openMemberProfile(userId,own=false){
  const {data,error}=await db.from("profiles").select("id,display_name,role,created_at").eq("id",userId).maybeSingle();
  if(error||!data){toast("Could not load this member profile.");return}
  $("profile-name").textContent=data.display_name||"Community Member";
+ $("profile-avatar").src=data.avatar_url||"";$("profile-avatar").classList.toggle("hidden",!data.avatar_url);$("profile-avatar-fallback").classList.toggle("hidden",!!data.avatar_url);$("profile-avatar-fallback").textContent=(data.display_name||"LS").slice(0,2).toUpperCase();
  $("profile-role").textContent=(data.role||"member").toUpperCase();
  $("profile-joined").textContent="Member since "+new Date(data.created_at).toLocaleDateString();
  $("profile-edit").classList.toggle("hidden",!(own&&currentUser&&currentUser.id===userId));
  $("display-name-input").value=data.display_name||"";
  $("profile-modal").classList.remove("hidden");
 }
+$("upload-avatar").addEventListener("click",async()=>{
+ if(!currentUser||!requireSetup())return;
+ const file=$("avatar-file").files[0];
+ if(!file){toast("Choose a profile picture first.");return}
+ if(!["image/png","image/jpeg","image/webp","image/gif"].includes(file.type)){toast("Choose a PNG, JPG, WEBP, or GIF image.");return}
+ if(file.size>2*1024*1024){toast("Profile pictures must be 2 MB or smaller.");return}
+ const ext=({ "image/png":"png","image/jpeg":"jpg","image/webp":"webp","image/gif":"gif"})[file.type];
+ const path=currentUser.id+"/avatar."+ext;
+ const {error:uploadError}=await db.storage.from("avatars").upload(path,file,{upsert:true,contentType:file.type,cacheControl:"3600"});
+ if(uploadError){toast("Upload failed. Run the profile picture setup SQL first.");return}
+ const {data:{publicUrl}}=db.storage.from("avatars").getPublicUrl(path);
+ const avatarUrl=publicUrl+"?v="+Date.now();
+ const {data,error}=await db.from("profiles").update({avatar_url:avatarUrl}).eq("id",currentUser.id).select("id,display_name,role,avatar_url,created_at").single();
+ if(error){toast("Picture uploaded, but profile could not be updated. Run the profile setup SQL.");return}
+ currentProfile=data;updateAuthUI();$("profile-avatar").src=avatarUrl;$("profile-avatar").classList.remove("hidden");$("profile-avatar-fallback").classList.add("hidden");$("avatar-file").value="";toast("Profile picture updated.");refreshPosts();
+});
 $("save-display-name").addEventListener("click",async()=>{
  const name=$("display-name-input").value.trim();
  if(name.length<3||name.length>24){toast("Forum names must be 3–24 characters.");return}
  if(!/^[a-zA-Z0-9 _.-]+$/.test(name)){toast("Use letters, numbers, spaces, dots, underscores, or hyphens.");return}
- const {data,error}=await db.from("profiles").update({display_name:name}).eq("id",currentUser.id).select("id,display_name,role,created_at").single();
+ const {data,error}=await db.from("profiles").update({display_name:name}).eq("id",currentUser.id).select("id,display_name,role,avatar_url,created_at").single();
  if(error){toast("Could not save forum name. Run the profile setup SQL first.");return}
  currentProfile=data;currentRole=data.role;updateAuthUI();$("profile-name").textContent=data.display_name;$("profile-role").textContent=(data.role||"member").toUpperCase();toast("Forum name updated.");refreshPosts();
 });
