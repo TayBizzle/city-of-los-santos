@@ -5,7 +5,7 @@ const configured=SUPABASE_URL.startsWith("https://")&&!SUPABASE_URL.includes("YO
 const db=configured&&window.supabase?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
 let currentCategory="announcements",currentUser=null,currentRole="member",registering=false,selectedApplication="";
 const $=id=>document.getElementById(id);
-const categoryNames={announcements:"ANNOUNCEMENTS",general:"GENERAL DISCUSSION",gangs:"GANGS & ORGANIZATIONS",support:"SUPPORT & APPEALS"};
+const categoryNames={civilian:"CIVILIAN CENTER",factions:"FACTION CENTER",ooc:"OUT OF CHARACTER"};
 function toast(message){const el=$("toast");el.textContent=message;el.classList.remove("hidden");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.add("hidden"),3500)}
 function requireSetup(){if(!db){toast("Supabase is not connected. Check the Supabase client script and project settings.");return false}return true}
 function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
