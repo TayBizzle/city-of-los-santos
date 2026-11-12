@@ -1,8 +1,8 @@
 *{box-sizing:border-box}
-:root{--ink:#202327;--ink2:#292d32;--ink3:#343a42;--line:#3a4048;--text:#e3e6e9;--muted:#aeb5bd;--green:#4ca45b;--green2:#388c48;--blue:#82b9ed}
+:root{--ink:#202327;--ink2:#292d32;--ink3:#343a42;--line:#3a4048;--text:#e3e6e9;--muted:#aeb5bd;--green:#c62836;--green2:#a71927;--blue:#e45a65}
 html{scroll-behavior:smooth}
-body{margin:0;color:var(--text);font:14px Inter,Arial,sans-serif;background:#18212d url("assets/los-santos-background.jpg") center top/cover fixed no-repeat}
-body:before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(17,28,43,.48),rgba(11,18,27,.26) 35%,rgba(10,15,21,.52));z-index:-1}
+body{margin:0;color:var(--text);font:14px Inter,Arial,sans-serif;background:#18212d url("los-santos-background.jpg") center top/cover fixed no-repeat}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(12,8,10,.58),rgba(10,7,9,.35) 35%,rgba(8,6,8,.72));z-index:-1}
 a{color:inherit;text-decoration:none}
 button,input,textarea{font:inherit}
 .topbar{height:69px;background:#30363f;border-bottom:1px solid rgba(255,255,255,.08);box-shadow:0 2px 9px #0003;position:relative;z-index:5}
@@ -18,7 +18,7 @@ button,input,textarea{font:inherit}
 .user-actions{margin-left:auto;display:flex;align-items:center;gap:13px;white-space:nowrap}
 .user-button,.icon-button{border:0;background:none;color:#f4f5f6;cursor:pointer}
 .user-button{display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px}
-.avatar,.last-avatar{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#9cc9ee,#344c70);border:1px solid #9eafc2;color:#fff;font-size:10px;font-weight:800}
+.avatar,.last-avatar{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#d94753,#64121c);border:1px solid #e45a65;color:#fff;font-size:10px;font-weight:800}
 .icon-button{font-size:18px;padding:4px}
 .mobile-brand{display:none}
 .page-shell{max-width:1408px;margin:0 auto;padding:0 16px 35px}
@@ -46,7 +46,7 @@ button,input,textarea{font:inherit}
 .forum-group-label{padding:12px 14px 7px;color:#aeb5bd;font-size:11px;font-weight:700;background:rgba(35,38,42,.93);border-top:1px solid #363c43}
 .forum-row{width:100%;min-height:82px;display:grid;grid-template-columns:38px minmax(190px,1fr) 70px 80px 260px;gap:8px;align-items:center;padding:10px 14px;text-align:left;background:rgba(25,28,31,.88);color:var(--text);border:0;border-bottom:1px solid #3a4047;cursor:pointer}
 .forum-row:hover,.forum-row.active{background:rgba(47,53,59,.96)}
-.forum-symbol{width:29px;height:29px;border-radius:50%;display:grid;place-items:center;color:#7fc78b;font-size:21px}
+.forum-symbol{width:29px;height:29px;border-radius:50%;display:grid;place-items:center;color:#e45a65;font-size:21px}
 .forum-name b{display:block;font-size:14px;color:#f0f2f4}
 .forum-name small{display:block;color:#aeb5bd;font-size:11px;margin-top:6px}
 .forum-count{text-align:center;color:#d2d6db;font-size:15px}
@@ -81,7 +81,7 @@ button,input,textarea{font:inherit}
 .join-panel h3{padding:0;background:none;border:0;font-size:14px}
 .join-panel p{font-size:11px;line-height:1.55;color:#aeb5bd}
 .join-panel .wide{width:100%}
-.join-panel>a{display:block;margin-top:13px;font-size:11px;color:#a8d3ad}
+.join-panel>a{display:block;margin-top:13px;font-size:11px;color:#f07880}
 .form-card{padding:17px;margin:12px 0;background:#24292f;border:1px solid #48515b;border-radius:5px}
 .form-card h3{font-size:16px;margin:0 0 13px}
 .form-card input,.form-card textarea,.modal input{display:block;width:100%;padding:12px;margin:0 0 10px;border:1px solid #4a525b;border-radius:4px;background:#171b20;color:#f1f3f5;outline:none}
@@ -112,3 +112,18 @@ footer a{color:#c5d7e8}
 @media(max-width:1000px){.topbar-inner{gap:10px}.main-nav a{padding:0 9px}.search-wrap{max-width:260px}.content-grid{grid-template-columns:minmax(0,1fr) 225px}.forum-column-head{grid-template-columns:minmax(190px,1fr) 55px 65px 205px}.forum-row{grid-template-columns:32px minmax(155px,1fr) 55px 65px 205px}.application-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:720px){.topbar{height:auto}.topbar-inner{min-height:62px;flex-wrap:wrap;padding:8px 12px;gap:7px}.mobile-brand{display:block;font-weight:800;font-size:16px;color:#fff;margin-right:5px}.main-nav{order:3;width:100%;height:40px;overflow:auto}.main-nav a{font-size:11px}.search-wrap{flex:1;min-width:120px;height:35px;margin:0}.user-actions{gap:5px}.user-button{font-size:11px}.icon-button{display:none}.page-shell{padding:0 10px 25px}.masthead{height:240px;padding-top:38px}.server-emblem{width:165px;height:165px}.emblem-skyline{font-size:28px}.emblem-title strong{font-size:15px}.season-banner{height:110px}.forum-heading{height:auto;min-height:68px;flex-wrap:wrap;padding:12px}.forum-heading h1{font-size:17px}.content-grid{grid-template-columns:1fr}.forum-column-head{display:none}.forum-row{grid-template-columns:30px minmax(0,1fr) 45px 45px;min-height:75px;padding:9px}.last-post{grid-column:2/-1;margin:3px 0 0 0}.forum-count{font-size:12px}.forum-name b{font-size:12px}.forum-name small{font-size:10px}.sidebar{grid-template-columns:1fr 1fr}.join-panel{grid-column:1/-1}.lower-heading,.rules-strip{display:block}.lower-heading p{margin-bottom:0}.application-grid{grid-template-columns:repeat(2,1fr)}footer{flex-wrap:wrap;gap:10px}.search-wrap{display:none}}
 @media(max-width:430px){.sidebar{grid-template-columns:1fr}.application-grid{grid-template-columns:1fr 1fr}.heading-actions .subtle-button{display:none}.breadcrumb{height:37px}}
+
+/* City Of Los Santos black-and-red finish */
+:root{--ink:#171719;--ink2:#202023;--ink3:#2b2b30;--line:#40383b;--text:#f1edef;--muted:#b9afb2}
+.topbar{background:rgba(13,13,15,.97);border-bottom:2px solid #9f1d2a}
+.main-nav a:hover,.main-nav a.selected{background:#421a20}
+.search-wrap{background:#211c1e;border-color:#493238}
+.season-banner,.forum-heading,.forum-board,.side-panel,.lower-section,.rules-strip{backdrop-filter:blur(8px);background:rgba(17,15,17,.94);border-color:rgba(198,40,54,.3)}
+.board-title,.topics-header,.side-panel h3{background:#24191c;border-color:#49252b}
+.forum-group-label,.forum-column-head{background:#1c191b;border-color:#3b292d}
+.forum-row{background:rgba(20,17,19,.94);border-color:#38272b}.forum-row:hover,.forum-row.active{background:rgba(65,24,31,.8)}
+.create-button{background:linear-gradient(135deg,#d52d3d,#991b2b);border-color:#e44a58}.create-button:hover{background:linear-gradient(135deg,#e33c4b,#b51d30)}
+.subtle-button{background:#292124;border-color:#52343a}.application-tile{background:#211b1e;border-color:#4a3036}.application-tile:hover{border-color:#d94a57;background:#332025}
+.section-kicker{color:#e46a75}.modal-box,.form-card{background:#1c191c;border-color:#5a3038}
+.form-card input,.form-card textarea,.modal input{background:#100e10;border-color:#51343b}
+.staff-applications{display:grid;gap:10px}.staff-application{padding:14px;background:#211b1e;border:1px solid #54333a;border-radius:5px}.staff-application h4{margin:0 0 7px;font-size:14px}.staff-application p{white-space:pre-wrap;color:#c9bec1;font-size:12px;line-height:1.55}.staff-status{color:#f07880;font-size:10px;font-weight:800;text-transform:uppercase}.staff-actions{display:flex;gap:8px;flex-wrap:wrap}
