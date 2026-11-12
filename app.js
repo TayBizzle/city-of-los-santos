@@ -1,6 +1,6 @@
 // City Of Los Santos starter. Add your Supabase URL and anon key below.
-const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+const SUPABASE_URL = "https://kyosnsplubacxqgdvqpk.supabase.co/rest/v1/";
+const SUPABASE_ANON_KEY = "sb_publishable_OvSyDiY9_2hDu1GgqVpK8w_IeQKpGRd";
 const configured = SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("YOUR_") && !SUPABASE_ANON_KEY.includes("YOUR_");
 const db = configured && window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 let currentCategory = "announcements";
