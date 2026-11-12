@@ -191,3 +191,16 @@ footer a{color:#c5d7e8}
 #profile-avatar-fallback{font-size:27px;font-weight:800;color:#ff9aa3}
 .profile-box #avatar-file{padding:9px;font-size:11px}
 .profile-box .wide{width:100%;margin-top:5px}
+
+/* Custom community roles and administrator role manager */
+.role-badge{display:inline-block;margin-left:6px;padding:3px 7px;border:1px solid #71313a;border-radius:3px;background:#351a20;color:#ff9aa3;font-size:9px;font-weight:800;letter-spacing:.35px;vertical-align:middle}
+.role-manager{margin-top:22px;padding-top:18px;border-top:1px solid #513039}
+.role-manager-heading{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:12px}
+.role-manager-heading h3{margin:5px 0 0;font-size:16px}
+.role-manager-heading p{margin:0;color:#aeb5bd;font-size:11px}
+.staff-member-roles{display:grid;gap:7px}
+.role-member-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,220px) auto;gap:9px;align-items:center;padding:10px;background:#211b1e;border:1px solid #493038;border-radius:4px}
+.role-member-info b,.role-member-info small{display:block}
+.role-member-info b{font-size:12px}.role-member-info small{margin-top:4px;color:#f07880;font-size:10px}
+.role-member-row select{min-width:0;width:100%;padding:9px;background:#100e10;color:#f1edef;border:1px solid #51343b;border-radius:4px}
+@media(max-width:600px){.role-manager-heading{display:block}.role-manager-heading p{margin-top:8px}.role-member-row{grid-template-columns:1fr 1fr}.role-member-info{grid-column:1/-1}.role-member-row button{width:100%}}
