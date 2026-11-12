@@ -24,7 +24,7 @@ function updateAuthUI(){
  $("auth-submit").textContent=registering?"REGISTER":"SIGN IN";
  $("auth-mode").textContent=registering?"Already registered? Sign in":"Need an account? Register";
  $("sign-out").classList.toggle("hidden",!currentUser);$("auth-form").classList.toggle("hidden",!!currentUser);
- $("profile-sign-out").classList.toggle("hidden",!currentUser);
+ $("profile-sign-out").classList.toggle("hidden",!currentUser);$("top-sign-out").classList.toggle("hidden",!currentUser);
  $("auth-message").textContent=currentUser?currentUser.email:"";
  $("staff-tools").classList.toggle("hidden",!(currentUser&&isStaff()));
  $("staff-role-tools").classList.toggle("hidden",!(currentUser&&currentRole==="admin"));
@@ -78,6 +78,7 @@ async function setUser(user){
 $("year").textContent=new Date().getFullYear();
 $("account-toggle").addEventListener("click",()=>currentUser?openMemberProfile(currentUser.id,true):showAuth());$("side-account").addEventListener("click",()=>currentUser?openMemberProfile(currentUser.id,true):showAuth());$("close-auth").addEventListener("click",hideAuth);
 $("close-profile").addEventListener("click",()=>$("profile-modal").classList.add("hidden"));
+$("top-sign-out").addEventListener("click",async()=>{if(db)await db.auth.signOut();await setUser(null);$("profile-modal").classList.add("hidden");hideAuth();toast("Signed out.")});
 async function openMemberProfile(userId,own=false){
  if(!db)return;
  const {data,error}=await db.from("profiles").select("id,display_name,role,avatar_url,created_at").eq("id",userId).maybeSingle();
