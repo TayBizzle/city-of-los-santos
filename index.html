@@ -171,6 +171,21 @@
       <p id="auth-message" class="form-message"></p><button id="forgot-password" class="link-button" type="button">Forgot password?</button><button id="auth-mode" class="link-button" type="button">Need an account? Register</button><button id="sign-out" class="link-button hidden" type="button">SIGN OUT</button>
     </div>
   </div>
+  <div id="profile-modal" class="modal hidden">
+    <div class="modal-box profile-box">
+      <button id="close-profile" class="modal-close" type="button">×</button>
+      <p class="section-kicker">COMMUNITY MEMBER</p>
+      <h2 id="profile-name">Member profile</h2>
+      <p id="profile-role" class="profile-role"></p>
+      <p id="profile-joined" class="post-meta"></p>
+      <div id="profile-edit" class="hidden">
+        <label for="display-name-input">YOUR PUBLIC FORUM NAME</label>
+        <input id="display-name-input" maxlength="24" minlength="3" placeholder="Choose a forum name">
+        <button id="save-display-name" class="create-button wide" type="button">SAVE FORUM NAME</button>
+        <p class="post-meta">3–24 characters. Your email stays private.</p>
+      </div>
+    </div>
+  </div>
   <div id="toast" class="toast hidden" role="status"></div>
 </body>
 </html>
