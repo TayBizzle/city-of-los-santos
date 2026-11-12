@@ -205,4 +205,22 @@ footer a{color:#c5d7e8}
 .role-member-row select{min-width:0;width:100%;padding:9px;background:#100e10;color:#f1edef;border:1px solid #51343b;border-radius:4px}
 @media(max-width:600px){.role-manager-heading{display:block}.role-manager-heading p{margin-top:8px}.role-member-row{grid-template-columns:1fr 1fr}.role-member-info{grid-column:1/-1}.role-member-row button{width:100%}}
 
-.top-sign-out{border:1px solid #b83240;background:#8f1d2a;color:#fff;border-radius:5px;padding:8px 11px;font-size:10px;font-weight:800;letter-spacing:.6px;cursor:pointer}.top-sign-out:hover{background:#b83240}
+
+/* Unified account settings */
+.settings-box{width:min(520px,100%);max-height:88vh;overflow-y:auto}
+.settings-account{display:flex;align-items:center;gap:13px;padding:13px;background:#261b1f;border:1px solid #56313a;border-radius:5px;margin:0 0 15px}
+.settings-avatar{width:48px;height:48px;overflow:hidden;border-radius:50%;border:2px solid #a52a39;background:#351b21;flex:none}
+.settings-avatar img{width:100%;height:100%;object-fit:cover}
+.settings-account strong,.settings-account small{display:block}
+.settings-account strong{font-size:13px}.settings-account small{margin-top:5px;color:#b9afb2;font-size:11px}
+.settings-section{padding:15px 0;border-top:1px solid #493038}
+.settings-section h3{margin:0 0 12px;font-size:14px}
+.settings-section label{display:block;margin:10px 0 7px;color:#e7c4c8;font-size:10px;font-weight:800;letter-spacing:1px}
+.settings-section input{display:block;width:100%;padding:12px;margin:0 0 9px;border:1px solid #51343b;border-radius:4px;background:#100e10;color:#f1edef}
+.settings-section .wide,.settings-signout{width:100%}
+.settings-danger{border:1px solid #7b2934;border-radius:5px;padding:14px;margin:8px 0 14px;background:#2a171c}
+.settings-danger p{font-size:11px;line-height:1.5;color:#c9bec1}
+.danger-button{border:1px solid #f06470;background:#741b28;color:white;border-radius:4px;padding:11px 13px;font-size:11px;font-weight:800;cursor:pointer}
+.danger-button:hover{background:#a51f30}
+.danger-button:disabled{opacity:.6;cursor:wait}
+.settings-signout{padding:12px}
