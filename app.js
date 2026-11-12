@@ -23,8 +23,8 @@ function updateAuthUI(){
  $("auth-heading").textContent=currentUser?"YOU'RE SIGNED IN.":(registering?"CREATE ACCOUNT.":"WELCOME BACK.");
  $("auth-submit").textContent=registering?"REGISTER":"SIGN IN";
  $("auth-mode").textContent=registering?"Already registered? Sign in":"Need an account? Register";
- $("sign-out").classList.toggle("hidden",!currentUser);$("auth-form").classList.toggle("hidden",!!currentUser);
- $("profile-sign-out").classList.toggle("hidden",!currentUser);$("top-sign-out").classList.toggle("hidden",!currentUser);
+ $("auth-form").classList.toggle("hidden",!!currentUser);
+ $("top-sign-out").classList.toggle("hidden",!currentUser);
  $("auth-message").textContent=currentUser?currentUser.email:"";
  $("staff-tools").classList.toggle("hidden",!(currentUser&&isStaff()));
  $("staff-role-tools").classList.toggle("hidden",!(currentUser&&currentRole==="admin"));
@@ -116,6 +116,7 @@ $("save-display-name").addEventListener("click",async()=>{
  currentProfile=data;currentRole=data.role;updateAuthUI();$("profile-name").textContent=data.display_name;$("profile-role").textContent=roleLabel(data.role).toUpperCase();toast("Forum name updated.");refreshPosts();
 });
 $("auth-mode").addEventListener("click",()=>{registering=!registering;updateAuthUI();$("auth-message").textContent=""});
+$("discord-auth").addEventListener("click",async()=>{if(!requireSetup())return;const {error}=await db.auth.signInWithOAuth({provider:"discord",options:{redirectTo:window.location.origin}});if(error){$("auth-message").textContent=error.message;}});
 $("forgot-password").addEventListener("click",async()=>{if(!requireSetup())return;const email=$("auth-email").value.trim();if(!email){$("auth-message").textContent="Enter your email address first.";return}const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin});$("auth-message").textContent=error?error.message:"Password reset email sent. Check your inbox and spam folder.";});
 $("password-reset-form").addEventListener("submit",async e=>{e.preventDefault();const password=$("new-password").value;if(password.length<8){$("auth-message").textContent="Use at least 8 characters.";return}const {error}=await db.auth.updateUser({password});$("auth-message").textContent=error?error.message:"Password updated! You can now sign in with your new password.";if(!error){$("password-reset-form").classList.add("hidden");$("auth-form").classList.remove("hidden");$("auth-password").value="";}});
 $("auth-form").addEventListener("submit",async e=>{
@@ -126,8 +127,6 @@ $("auth-form").addEventListener("submit",async e=>{
  if(registering&&!r.data.session){$("auth-message").textContent="Check your email to confirm your account, then sign in.";return}
  await setUser(r.data.user);toast(registering?"Account created.":"Signed in.");if(r.data.session)hideAuth();
 });
-$("sign-out").addEventListener("click",async()=>{if(db)await db.auth.signOut();await setUser(null);hideAuth();toast("Signed out.")});
- $("profile-sign-out").addEventListener("click",async()=>{if(db)await db.auth.signOut();await setUser(null);$("profile-modal").classList.add("hidden");toast("Signed out.")});
 document.querySelectorAll(".category").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".category").forEach(x=>x.classList.remove("active"));b.classList.add("active");currentCategory=b.dataset.category;$("topic-heading").textContent=categoryNames[currentCategory];refreshPosts()}));
 $("new-post").addEventListener("click",()=>{if(!currentUser){showAuth();toast("Sign in before creating a topic.");return}if(!requireSetup())return;$("post-form").classList.remove("hidden");$("post-title").focus()});
 $("cancel-post").addEventListener("click",()=>$("post-form").classList.add("hidden"));
@@ -153,7 +152,6 @@ function showPasswordReset(){
  $("auth-message").textContent="Choose a new password.";
  $("forgot-password").classList.add("hidden");
  $("auth-mode").classList.add("hidden");
- $("sign-out").classList.add("hidden");
 }
 if(db){
  db.auth.onAuthStateChange((event,session)=>{
