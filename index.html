@@ -27,7 +27,7 @@
         <input type="search" placeholder="Search the community..." aria-label="Search the community" onkeydown="if(event.key==='Enter'){document.getElementById('forums').scrollIntoView({behavior:'smooth'});}">
       </div>
       <div class="user-actions">
-        <button id="account-toggle" class="user-button" type="button"><span class="avatar">LS</span><span id="account-label">Account</span></button>
+        <button id="account-toggle" class="user-button" type="button"><span class="avatar" id="account-avatar">LS</span><span id="account-label">Account</span></button>
         <button class="icon-button" type="button" aria-label="Messages" title="Messages">✉</button>
         <button class="icon-button" type="button" aria-label="Notifications" title="Notifications">♧</button>
       </div>
@@ -175,12 +175,17 @@
     <div class="modal-box profile-box">
       <button id="close-profile" class="modal-close" type="button">×</button>
       <p class="section-kicker">COMMUNITY MEMBER</p>
+      <div class="profile-avatar-wrap"><img id="profile-avatar" class="profile-avatar" alt="Member profile picture" src="" /><span id="profile-avatar-fallback">LS</span></div>
       <h2 id="profile-name">Member profile</h2>
       <p id="profile-role" class="profile-role"></p>
       <p id="profile-joined" class="post-meta"></p>
       <div id="profile-edit" class="hidden">
         <label for="display-name-input">YOUR PUBLIC FORUM NAME</label>
         <input id="display-name-input" maxlength="24" minlength="3" placeholder="Choose a forum name">
+        <label for="avatar-file">YOUR PROFILE PICTURE</label>
+        <input id="avatar-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+        <button id="upload-avatar" class="create-button wide" type="button">UPLOAD PROFILE PICTURE</button>
+        <p class="post-meta">PNG, JPG, WEBP, or GIF. Maximum 2 MB.</p>
         <button id="save-display-name" class="create-button wide" type="button">SAVE FORUM NAME</button>
         <p class="post-meta">3–24 characters. Your email stays private.</p>
       </div>
