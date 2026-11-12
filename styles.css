@@ -165,3 +165,12 @@ footer a{color:#c5d7e8}
  .content-grid{grid-template-columns:1fr}
  .forum-row{grid-template-columns:28px minmax(0,1fr) 40px 42px}
 }
+
+
+/* Three-pillar roleplay forum organization */
+.forum-group-label{font-size:11px;letter-spacing:1px;color:#f07880;padding:13px 14px 8px}
+.forum-row{min-height:78px}
+.forum-name b{font-size:13px}
+.forum-name small{max-width:620px;line-height:1.45}
+.application-tile[data-app="Faction Registration"] span{color:#f07880}
+@media(max-width:720px){.forum-row{min-height:82px}.forum-name small{max-width:none}}
