@@ -3,95 +3,160 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="City Of Los Santos — FiveM roleplay community">
-  <title>City Of Los Santos | Community</title>
+  <meta name="description" content="City Of Los Santos — FiveM roleplay community forums">
+  <title>City Of Los Santos | Forums</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
-  <div class="topline"></div>
-  <header class="site-header">
-    <a class="brand" href="#home"><span class="brand-mark">LS</span><span>CITY OF <b>LOS SANTOS</b><small>SAN ANDREAS ROLEPLAY COMMUNITY</small></span></a>
-    <nav>
-      <a href="#home">HOME</a><a href="#forums">FORUMS</a><a href="#applications">APPLICATIONS</a><a href="#rules">RULES</a>
-    </nav>
-    <button id="account-toggle" class="button button-outline">ACCOUNT</button>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="mobile-brand" href="#home">COLS</a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#home"><span class="nav-icon">⌂</span> Home</a>
+        <a class="selected" href="#forums"><span class="nav-icon">▤</span> Forums <span class="caret">⌄</span></a>
+        <a href="#whats-new"><span class="nav-icon">☆</span> What's new</a>
+        <a href="#members"><span class="nav-icon">♙</span> Members</a>
+      </nav>
+      <div class="search-wrap">
+        <span aria-hidden="true">⌕</span>
+        <input type="search" placeholder="Search the community..." aria-label="Search the community" onkeydown="if(event.key==='Enter'){document.getElementById('forums').scrollIntoView({behavior:'smooth'});}">
+      </div>
+      <div class="user-actions">
+        <button id="account-toggle" class="user-button" type="button"><span class="avatar">LS</span><span id="account-label">Account</span></button>
+        <button class="icon-button" type="button" aria-label="Messages" title="Messages">✉</button>
+        <button class="icon-button" type="button" aria-label="Notifications" title="Notifications">♧</button>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <section id="home" class="hero">
-      <div class="hero-shade"></div>
-      <div class="hero-content">
-        <p class="eyebrow">LOS SANTOS • FIVEM ROLEPLAY</p>
-        <h1>THE CITY<br><span>NEVER SLEEPS.</span></h1>
-        <p class="hero-copy">Build your story. Make your name. Leave your mark on the streets of Los Santos.</p>
-        <div class="hero-actions"><a class="button button-red" href="#forums">ENTER THE FORUMS</a><a class="button button-outline" href="#applications">APPLY TO JOIN</a></div>
+  <main id="home" class="page-shell">
+    <section class="masthead">
+      <div class="server-emblem" aria-label="City Of Los Santos roleplay emblem">
+        <img class="server-logo" src="assets/city-of-los-santos-logo.png" alt="City Of Los Santos V2 logo">
       </div>
-      <div class="hero-stamp">COLS<br><small>ROLEPLAY<br>COMMUNITY</small></div>
     </section>
 
-    <section class="ticker"><span>CITY OF LOS SANTOS ROLEPLAY</span><i>✦</i><span>YOUR STORY STARTS HERE</span><i>✦</i><span>SAN ANDREAS • LOS SANTOS</span></section>
+    <div class="breadcrumb"><a href="#home">Home</a><span>›</span><strong>Forums</strong></div>
 
-    <section class="section" id="forums">
-      <div class="section-heading"><div><p class="eyebrow">COMMUNITY HUB</p><h2>THE <span>FORUMS</span></h2></div><p class="muted">Talk with the community, share updates, and stay connected.</p></div>
-      <div class="forum-layout">
-        <div class="forum-main">
-          <div class="panel-title"><span>DISCUSSION BOARDS</span><span class="live-dot">COMMUNITY</span></div>
-          <div class="category-list">
-            <button class="category active" data-category="announcements"><span class="cat-icon">01</span><span><b>Announcements</b><small>Server news, updates, and important notices</small></span><span class="cat-arrow">›</span></button>
-            <button class="category" data-category="general"><span class="cat-icon">02</span><span><b>General Discussion</b><small>Meet players and talk about the city</small></span><span class="cat-arrow">›</span></button>
-            <button class="category" data-category="gangs"><span class="cat-icon">03</span><span><b>Gangs & Organizations</b><small>Crews, businesses, and community groups</small></span><span class="cat-arrow">›</span></button>
-            <button class="category" data-category="support"><span class="cat-icon">04</span><span><b>Support & Appeals</b><small>Player reports, ban appeals, and help</small></span><span class="cat-arrow">›</span></button>
-          </div>
-          <div class="panel-title topics-title"><span id="topic-heading">ANNOUNCEMENTS</span><button id="new-post" class="text-button">+ NEW TOPIC</button></div>
-          <div id="posts" class="posts"><p class="muted empty">Connect your Supabase project to load community discussions.</p></div>
-          <form id="post-form" class="form-card hidden">
-            <h3>CREATE A TOPIC</h3>
-            <input id="post-title" maxlength="120" placeholder="Topic title" required>
-            <textarea id="post-body" rows="4" maxlength="5000" placeholder="Write your post..." required></textarea>
-            <div class="form-actions"><button type="button" id="cancel-post" class="button button-outline">CANCEL</button><button class="button button-red" type="submit">PUBLISH TOPIC</button></div>
-          </form>
+    <section class="season-banner">
+      <div class="season-title">City Of Los Santos Roleplay</div>
+      <p>Welcome to the city. Your story starts here.</p>
+    </section>
+
+    <section id="forums" class="forum-heading">
+      <h1>City Of Los Santos Forums</h1>
+      <div class="heading-actions">
+        <a class="subtle-button" href="#whats-new">ϟ New posts</a>
+        <button id="new-post" class="create-button" type="button">＋ Post thread...</button>
+      </div>
+    </section>
+
+    <div class="content-grid">
+      <section class="forum-board">
+        <div class="board-title">CITY OF LOS SANTOS COMMUNITY</div>
+        <div class="forum-column-head"><span>FORUM</span><span>THREADS</span><span>MESSAGES</span><span>LAST POST</span></div>
+
+        <div class="forum-group-label">COMMUNITY</div>
+        <button class="category forum-row active" data-category="announcements" type="button">
+          <span class="forum-symbol">▱</span>
+          <span class="forum-name"><b>Announcements</b><small>Official server news, updates, and important notices</small></span>
+          <span class="forum-count">—</span><span class="forum-count">—</span>
+          <span class="last-post"><span class="last-avatar">LS</span><span><b>Welcome to City Of Los Santos</b><small>Be the first to start a discussion</small></span></span>
+        </button>
+        <button class="category forum-row" data-category="general" type="button">
+          <span class="forum-symbol">▱</span>
+          <span class="forum-name"><b>General Discussion</b><small>Meet the community and talk about life in the city</small></span>
+          <span class="forum-count">—</span><span class="forum-count">—</span>
+          <span class="last-post"><span class="last-avatar">LS</span><span><b>General city discussion</b><small>No threads yet</small></span></span>
+        </button>
+
+        <div class="forum-group-label">ROLEPLAY & ORGANIZATIONS</div>
+        <button class="category forum-row" data-category="gangs" type="button">
+          <span class="forum-symbol">▱</span>
+          <span class="forum-name"><b>Gangs & Organizations</b><small>Crews, businesses, and registered organizations</small></span>
+          <span class="forum-count">—</span><span class="forum-count">—</span>
+          <span class="last-post"><span class="last-avatar">LS</span><span><b>Organization announcements</b><small>No threads yet</small></span></span>
+        </button>
+        <button class="category forum-row" data-category="support" type="button">
+          <span class="forum-symbol">▱</span>
+          <span class="forum-name"><b>Support & Appeals</b><small>Get help, report an issue, or submit an appeal</small></span>
+          <span class="forum-count">—</span><span class="forum-count">—</span>
+          <span class="last-post"><span class="last-avatar">LS</span><span><b>Community support</b><small>No threads yet</small></span></span>
+        </button>
+
+        <div class="topics-header" id="whats-new">
+          <h2 id="topic-heading">ANNOUNCEMENTS</h2>
+          <span>Latest discussions</span>
         </div>
-        <aside class="sidebar">
-          <div class="side-card red-card"><p class="eyebrow">BECOME PART OF THE CITY</p><h3>MAKE YOUR<br>MOVE.</h3><p>Find your place in the City Of Los Santos.</p><a href="#applications" class="button button-light">VIEW APPLICATIONS</a></div>
-          <div class="side-card"><p class="eyebrow">COMMUNITY STATUS</p><h3>WELCOME TO<br>LOS SANTOS.</h3><p class="muted">Create an account to join discussions and submit applications.</p><button class="button button-outline full" id="side-account">CREATE ACCOUNT</button></div>
-        </aside>
-      </div>
-    </section>
+        <div id="posts" class="posts"><p class="empty">Loading community discussions...</p></div>
+        <form id="post-form" class="form-card hidden">
+          <h3>CREATE A THREAD</h3>
+          <input id="post-title" maxlength="120" placeholder="Thread title" required>
+          <textarea id="post-body" rows="4" maxlength="5000" placeholder="Write your post..." required></textarea>
+          <div class="form-actions"><button type="button" id="cancel-post" class="subtle-button">CANCEL</button><button class="create-button" type="submit">PUBLISH THREAD</button></div>
+        </form>
+      </section>
 
-    <section id="applications" class="section applications-section">
-      <div class="section-heading"><div><p class="eyebrow">FIND YOUR PLACE</p><h2>JOIN THE <span>CITY</span></h2></div><p class="muted">Choose a path and send your application to the team.</p></div>
+      <aside class="sidebar">
+        <section class="side-panel" id="members">
+          <h3>♙ &nbsp; Members online</h3>
+          <div class="side-panel-body">
+            <p class="online-note"><span class="online-dot"></span> Community members</p>
+            <p class="side-muted">Sign in to join conversations and appear in the community.</p>
+          </div>
+          <div class="side-panel-footer">Welcome to the City Of Los Santos community</div>
+        </section>
+        <section class="side-panel">
+          <h3>⌁ &nbsp; Trending content</h3>
+          <div class="side-panel-body trend-list">
+            <a href="#applications"><b>Join the city</b><small>Explore civilian and department applications</small></a>
+            <a href="#rules"><b>Community rules</b><small>Read the standards before playing</small></a>
+            <a href="#forums"><b>Latest discussions</b><small>See what the community is talking about</small></a>
+          </div>
+        </section>
+        <section class="side-panel join-panel">
+          <h3>Become part of Los Santos</h3>
+          <p>Create an account to post threads and submit applications.</p>
+          <button id="side-account" class="create-button wide" type="button">CREATE ACCOUNT</button>
+          <a href="#applications">View applications →</a>
+        </section>
+      </aside>
+    </div>
+
+    <section id="applications" class="lower-section">
+      <div class="lower-heading"><div><span class="section-kicker">JOIN THE COMMUNITY</span><h2>Applications</h2></div><p>Choose your path in the City Of Los Santos.</p></div>
       <div class="application-grid">
-        <button class="application-tile" data-app="Civilian"><span>01 / PUBLIC</span><b>CIVILIAN</b><small>Start your story in the city.</small><i>↗</i></button>
-        <button class="application-tile" data-app="Gang / Organization"><span>02 / GROUPS</span><b>GANGS</b><small>Register your crew or organization.</small><i>↗</i></button>
-        <button class="application-tile" data-app="Police Department"><span>03 / LEO</span><b>POLICE</b><small>Serve and protect the city.</small><i>↗</i></button>
-        <button class="application-tile" data-app="EMS Department"><span>04 / MEDICAL</span><b>EMS</b><small>Help keep the city alive.</small><i>↗</i></button>
-        <button class="application-tile" data-app="Staff Team"><span>05 / STAFF</span><b>STAFF</b><small>Help build the community.</small><i>↗</i></button>
+        <button class="application-tile" data-app="Civilian" type="button"><span>PUBLIC</span><b>Civilian</b><small>Start your story in the city.</small></button>
+        <button class="application-tile" data-app="Gang / Organization" type="button"><span>ORGANIZATIONS</span><b>Gang / Organization</b><small>Register your crew or group.</small></button>
+        <button class="application-tile" data-app="Police Department" type="button"><span>LAW ENFORCEMENT</span><b>Police</b><small>Serve and protect the city.</small></button>
+        <button class="application-tile" data-app="EMS Department" type="button"><span>MEDICAL</span><b>EMS</b><small>Help keep the city alive.</small></button>
+        <button class="application-tile" data-app="Staff Team" type="button"><span>COMMUNITY</span><b>Staff</b><small>Help lead the community.</small></button>
       </div>
       <form id="application-form" class="form-card hidden">
-        <div class="form-top"><div><p class="eyebrow">CITY OF LOS SANTOS</p><h3 id="application-heading">APPLICATION</h3></div><button type="button" id="close-application" class="text-button">CLOSE ×</button></div>
+        <div class="form-top"><div><p class="section-kicker">CITY OF LOS SANTOS</p><h3 id="application-heading">APPLICATION</h3></div><button type="button" id="close-application" class="subtle-button">CLOSE ×</button></div>
         <input id="app-name" maxlength="80" placeholder="Your name / character name" required>
         <input id="app-discord" maxlength="80" placeholder="Discord username" required>
         <textarea id="app-details" rows="5" maxlength="5000" placeholder="Tell us why you're applying..." required></textarea>
-        <button class="button button-red" type="submit">SUBMIT APPLICATION</button>
+        <button class="create-button" type="submit">SUBMIT APPLICATION</button>
       </form>
     </section>
 
-    <section id="rules" class="section rules-section">
-      <div><p class="eyebrow">KNOW THE STANDARD</p><h2>RESPECT THE<br><span>ROLEPLAY.</span></h2></div>
-      <div class="rules-list"><p><b>01</b> Respect every member of the community.</p><p><b>02</b> Follow server and platform rules.</p><p><b>03</b> Keep roleplay fair and immersive.</p><p><b>04</b> Use the proper channels for reports and appeals.</p><small>Replace these starter rules with your official server rules before launch.</small></div>
-    </section>
+    <section id="rules" class="rules-strip"><div><span class="section-kicker">KNOW THE STANDARD</span><h2>Community rules</h2></div><p>Respect every member. Follow server rules. Keep roleplay fair and immersive. Use the proper channels for reports and appeals.</p></section>
   </main>
 
-  <footer><a class="brand" href="#home"><span class="brand-mark">LS</span><span>CITY OF <b>LOS SANTOS</b><small>SAN ANDREAS ROLEPLAY COMMUNITY</small></span></a><p>© <span id="year"></span> CITY OF LOS SANTOS. COMMUNITY PROJECT.</p><a href="#home">BACK TO TOP ↑</a></footer>
+  <footer><span>© <span id="year"></span> CITY OF LOS SANTOS ROLEPLAY</span><span>COMMUNITY • ROLEPLAY • SAN ANDREAS</span><a href="#home">Back to top ↑</a></footer>
 
   <div id="auth-modal" class="modal hidden">
     <div class="modal-box">
-      <button id="close-auth" class="modal-close">×</button>
-      <p class="eyebrow">MEMBER ACCESS</p><h2 id="auth-heading">WELCOME BACK.</h2>
-      <form id="auth-form"><input id="auth-email" type="email" placeholder="Email address" required><input id="auth-password" type="password" minlength="8" placeholder="Password (8+ characters)" required><button id="auth-submit" class="button button-red full" type="submit">SIGN IN</button></form>
-      <p id="auth-message" class="form-message"></p><button id="auth-mode" class="text-button">Need an account? Register</button><button id="sign-out" class="text-button hidden">SIGN OUT</button>
+      <button id="close-auth" class="modal-close" type="button">×</button>
+      <p class="section-kicker">MEMBER ACCESS</p><h2 id="auth-heading">WELCOME BACK</h2>
+      <form id="auth-form"><input id="auth-email" type="email" placeholder="Email address" required><input id="auth-password" type="password" minlength="8" placeholder="Password (8+ characters)" required><button id="auth-submit" class="create-button wide" type="submit">SIGN IN</button></form>
+      <p id="auth-message" class="form-message"></p><button id="auth-mode" class="link-button" type="button">Need an account? Register</button><button id="sign-out" class="link-button hidden" type="button">SIGN OUT</button>
     </div>
   </div>
   <div id="toast" class="toast hidden" role="status"></div>
