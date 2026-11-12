@@ -51,6 +51,8 @@ async function setUser(user){
 $("year").textContent=new Date().getFullYear();
 $("account-toggle").addEventListener("click",showAuth);$("side-account").addEventListener("click",showAuth);$("close-auth").addEventListener("click",hideAuth);
 $("auth-mode").addEventListener("click",()=>{registering=!registering;updateAuthUI();$("auth-message").textContent=""});
+$("forgot-password").addEventListener("click",async()=>{if(!requireSetup())return;const email=$("auth-email").value.trim();if(!email){$("auth-message").textContent="Enter your email address first.";return}const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin});$("auth-message").textContent=error?error.message:"Password reset email sent. Check your inbox and spam folder.";});
+$("password-reset-form").addEventListener("submit",async e=>{e.preventDefault();const password=$("new-password").value;if(password.length<8){$("auth-message").textContent="Use at least 8 characters.";return}const {error}=await db.auth.updateUser({password});$("auth-message").textContent=error?error.message:"Password updated! You can now sign in with your new password.";if(!error){$("password-reset-form").classList.add("hidden");$("auth-form").classList.remove("hidden");$("auth-password").value="";}});
 $("auth-form").addEventListener("submit",async e=>{
  e.preventDefault();if(!requireSetup())return;
  const email=$("auth-email").value.trim(),password=$("auth-password").value;
@@ -77,5 +79,5 @@ $("application-form").addEventListener("submit",async e=>{
  const {error}=await db.from("applications").insert({type:selectedApplication,applicant_name:$("app-name").value.trim(),discord_username:$("app-discord").value.trim(),details:$("app-details").value.trim(),user_id:currentUser.id});
  if(error){toast(error.message);return}$("application-form").reset();$("application-form").classList.add("hidden");toast("Application submitted. Thank you.");
 });
-if(db){db.auth.getSession().then(({data,error})=>{if(error)toast(error.message);return setUser(data?.session?.user??null)});db.auth.onAuthStateChange((_event,session)=>setUser(session?.user??null))}
+if(db){db.auth.getSession().then(({data,error})=>{if(error)toast(error.message);return setUser(data?.session?.user??null)});db.auth.onAuthStateChange((event,session)=>{if(event==="PASSWORD_RECOVERY"){$("auth-modal").classList.remove("hidden");$("auth-form").classList.add("hidden");$("password-reset-form").classList.remove("hidden");$("auth-heading").textContent="RESET YOUR PASSWORD";$("auth-message").textContent="Choose a new password."; $("forgot-password").classList.add("hidden");$("auth-mode").classList.add("hidden");}setUser(session?.user??null)})}
 else{updateAuthUI();refreshPosts()}
