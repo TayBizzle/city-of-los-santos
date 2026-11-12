@@ -180,3 +180,14 @@ footer a{color:#c5d7e8}
 .profile-role{display:inline-block;padding:6px 10px;background:#421a20;border:1px solid #81313c;border-radius:4px;color:#ff9aa3;font-size:11px;font-weight:800;letter-spacing:.8px}
 .profile-box label{display:block;margin:16px 0 8px;color:#e7c4c8;font-size:10px;font-weight:800;letter-spacing:1px}
 .profile-box .post-meta{line-height:1.5}
+
+.avatar{overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.member-link{display:inline-flex;align-items:center;gap:7px;text-decoration:none}
+.member-avatar,.member-avatar-fallback{width:25px;height:25px;border-radius:50%;object-fit:cover;vertical-align:middle;border:1px solid #82404a}
+.member-avatar-fallback{display:inline-grid;place-items:center;background:#421a20;color:#ff9aa3;font-size:9px;font-weight:800}
+.profile-avatar-wrap{width:104px;height:104px;margin:0 auto 14px;position:relative;border-radius:50%;overflow:hidden;border:3px solid #9f2634;background:#2a1b1f;display:grid;place-items:center}
+.profile-avatar{width:100%;height:100%;object-fit:cover}
+#profile-avatar-fallback{font-size:27px;font-weight:800;color:#ff9aa3}
+.profile-box #avatar-file{padding:9px;font-size:11px}
+.profile-box .wide{width:100%;margin-top:5px}
